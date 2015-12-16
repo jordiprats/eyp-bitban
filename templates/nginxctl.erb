@@ -1,0 +1,43 @@
+#!/bin/bash
+
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+<% if defined?(@initscript) -%>
+NGINXCMD="<%= @initscript %>"
+<% else -%>
+NGINXCMD="/etc/init.d/nginx"
+<% end -%>
+
+if [ -z "$1" ];
+then
+	echo "$0 <OPTIONS>"
+	echo -e "\trestart"
+	echo -e "\tconfigtest"
+	exit 1
+fi
+
+case "$1" in
+	'restart')
+		$NGINXCMD configtest
+		if [ "$?" -eq 0 ];
+		then
+			echo "config OK, restarting..."
+			$NGINXCMD restart
+			exit $?
+		else
+			echo "configtest FAILED, restart skipped"
+			echo 1
+		fi
+
+	;;
+
+	'configtest')
+		$NGINXCMD configtest
+		exit $?
+	;;
+
+	*)
+		echo "unsupported"
+		exit 1
+	;;
+esac

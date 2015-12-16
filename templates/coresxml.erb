@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<solr persistent="true">
+
+<cores defaultCoreName="elespanol_content" adminPath="/admin/cores" zkClientTimeout="${zkClientTimeout:15000}" hostPort="8080" hostContext="solr">
+<core schema="bbtsolrcontent_schema.xml" loadOnStartup="true" instanceDir="elespanol_content/" transient="false" name="elespanol_content" config="bbtsolrcontent_config.xml" dataDir="data"/>
+</cores>
+
+</solr>
