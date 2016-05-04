@@ -7,7 +7,8 @@ define bitban::solr (
                       $pwdigest="sha",
                       $tomcatpw,
                       $user='solr',
-                      $userhome="${bitban::basedir}/VAR/solr"
+                      $userhome="${bitban::basedir}/VAR/solr",
+                      $content_conf="${bitban::basedir}/projects/elespanol/packages/BBTSolrContent/etc/es_ES",
                     ) {
   Exec {
   	path => '/usr/sbin:/usr/bin:/sbin:/bin',
@@ -134,7 +135,7 @@ define bitban::solr (
   }
 
   file { "${userhome}/elespanol_content/conf":
-    ensure => "${bitban::basedir}/projects/elespanol/packages/BBTSolrContent/etc/es_ES",
+    ensure => $content_conf,
     require => [ File["${userhome}/elespanol_content"], Tomcat::Instance['tomcat-solr'], Exec["untar solr ${bitban::basedir}"] ],
   }
 
