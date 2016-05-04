@@ -134,7 +134,7 @@ define bitban::solr (
   }
 
   file { "${userhome}/elespanol_content/conf":
-    ensure => "${bitban::basedir}/projects/elespanol/packages/BBTSolrContent/etc/es_ES",
+    ensure => "${bitban::basedir}projects/elespanol/sites/elespanol/default/packages/BBTSolrContent/etc/es_ES",
     require => [ File["${userhome}/elespanol_content"], Tomcat::Instance['tomcat-solr'], Exec["untar solr ${bitban::basedir}"] ],
   }
 
