@@ -147,6 +147,22 @@ define bitban::openresty	(
 		creates => "${basedir}/${instancename}/nginx/lua/modules/resty/http.lua",
 	}
 
+	exec { "git clone lua-resty-template ${basedir}/${instancename}":
+		command => 'git clone https://github.com/bungle/lua-resty-template.git',
+		cwd     => "${srcdir}",
+		require => File["${basedir}/${instancename}-${version}/nginx/lua/lib/lua-utf8.so"],
+		creates => "${srcdir}/lua-resty-template",
+	}
+
+	exec { "cp lua_resty_template to ${basedir}/${instancename}":
+		command => "cp ${srcdir}/lua-resty-template/lib/resty/* ${basedir}/${instancename}-${version}/nginx/lua/modules/resty",
+		require => [ Exec["git clone lua-resty-template ${basedir}/${instancename}"],
+								 Exec["mkdir p directoris ${basedir}/${instancename}-${version}/nginx/lua/modules/resty"]
+							 ],
+		creates => "${basedir}/${instancename}-${version}/nginx/lua/modules/resty/template.lua",
+	}
+
+
 	if($initscript)
 	{
 		file {"/etc/init.d/${servicename}":
@@ -156,7 +172,7 @@ define bitban::openresty	(
 			mode    => '0755',
 			content => template("bitban/nginxinitopenresty.erb"),
 			notify  => Service[$servicename],
-			require => Exec["cp lua_resty_http to ${basedir}/${instancename}"],
+			require => Exec[["cp lua_resty_http to ${basedir}/${instancename}", "cp lua_resty_template to ${basedir}/${instancename}"]],
 		}
 	}
 	else
