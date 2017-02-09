@@ -22,11 +22,6 @@ define bitban::openresty	(
 	validate_absolute_path($basedir)
 	validate_absolute_path($srcdir)
 
-	if defined(Class['ntteam'])
-	{
-		ntteam::tag{ 'openresty': }
-	}
-
 	if($nginxctl)
 	{
 		validate_absolute_path($nginxctl)
